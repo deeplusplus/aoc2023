@@ -1,17 +1,16 @@
 (require ['clojure.string :as 'str])
-(require ['clojure.edn :as 'edn])
 
 (def line_list (str/split-lines (slurp "input.txt")))
-(defn sum [number1 number2]
-  (+ number1 number2))
-(defn convertToInt [character]
-  (- (int character) 48))
 
-(defn print-first-and-last-digits [lines]
-    (doseq [line lines]
-          (let [digits (filter #(Character/isDigit %) line)]
-                  (when (seq digits)
-                           (+ (convertToInt (first digits)) (convertToInt (last digits)))
-                              ))))
+(defn line_to_first_digit [line]
+  (first (re-find #"[0-9]+" line)))
 
-(println (print-first-and-last-digits line_list))
+(defn line_to_last_digit [line]
+  (last (re-find #"[0-9]+" (str (reverse line)))))
+
+(defn number_from_line [line]
+  (Integer/parseInt (str (line_to_first_digit line) (line_to_last_digit line))))
+
+
+
+(println (reduce + (map number_from_line line_list)))
