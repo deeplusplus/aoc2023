@@ -10,7 +10,7 @@
 (defn split_on_space [line]
   (str/split line #" "))
 
-(def raw_line_list (str/split-lines (slurp "small_input.txt")))
+(def raw_line_list (str/split-lines (slurp "input.txt")))
 
 (def no_card_line_list (map remove_card raw_line_list))
 
@@ -23,9 +23,15 @@
 
 (def one_point_count (count (filter (fn [set_count] (= 1 set_count)) seq_of_counts)))
 
-(def greater_than_two_counts (count (filter (fn [set_count] (> 1 set_count)) seq_of_counts)))
+(def counts_greater_than_two (filter (fn [set_count] (< 1 set_count)) seq_of_counts))
+
+(defn two_multiply [winning_number_count] 
+  (Math/pow 2 (- winning_number_count 1)))
+
+(def greater_than_two_score (reduce + (map two_multiply counts_greater_than_two)))
 
 (println seq_of_intersections)
 (println seq_of_counts)
 (println one_point_count)
-(println greater_than_two_counts)
+(println (+ greater_than_two_score one_point_count))
+
