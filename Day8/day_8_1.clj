@@ -19,7 +19,8 @@
 (defn find_node [target_node]
   (first (filter (fn[node] (= target_node (:value node))) node_sequence)))
 
-(defn find_next_node [current_node next_direction iteration]
+(defn find_next_node [c_node n_d iter]
+  (loop [current_node c_node next_direction n_d iteration iter]
   (comment (println "AT NODE" (apply str [(:value current_node) ", L: " (:L current_node) ", R: " (:R current_node)])))
   (comment (println "GOING TO " next_direction))
   (comment (println iteration))
@@ -28,10 +29,10 @@
     (comp (println "FOUND ZZZ at iteration: " (str (dec iteration))) (throw (Exception. "STOP")))
   )
   (if (= next_direction \L)
-    (find_next_node (find_node (:L current_node)) (get_current_instruction iteration) (inc iteration)) 
-    (find_next_node (find_node (:R current_node)) (get_current_instruction iteration) (inc iteration))
+    (recur (find_node (:L current_node)) (get_current_instruction iteration) (inc iteration)) 
+    (recur (find_node (:R current_node)) (get_current_instruction iteration) (inc iteration))
   )
-)
+))
 
 (def starting_node (find_node "AAA"))
 
